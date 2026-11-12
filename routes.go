@@ -17,6 +17,8 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("DELETE /{id}", app.DeleteHandler)
 	mux.HandleFunc("PUT /{id}", app.PutHandler)
 	mux.HandleFunc("PATCH /{id}", app.PatchHandler)
+	mux.HandleFunc("GET /test", app.TestAllHandlers)
+	mux.HandleFunc("OPTIONS /", app.OptionsHandler)
 
 	handler := standard.Then(mux)
 	return handler
