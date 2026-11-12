@@ -1,4 +1,4 @@
-module example/hello
+module api-test
 
 go 1.27.3
 
