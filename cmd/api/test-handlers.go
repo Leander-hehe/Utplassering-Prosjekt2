@@ -13,12 +13,14 @@ func (app *application) TestAllHandlers(w http.ResponseWriter, r *http.Request) 
 
 	Testhandler(app.GetHandler, httptest.NewRequest("GET", "/", nil), w)
 
-	testHandlerWithBody(app.PostHandler, "POST", "/", map[string]string{"id": "test", "name": "test"}, w)
+	TestHandlerWithBody(app.PostHandler, "POST", "/", map[string]string{"id": "test", "name": "test", "description": "test"}, w)
 
 	Testhandler(app.DeleteHandler, httptest.NewRequest("DELETE", "/1", nil), w)
 
-	testHandlerWithBody(app.PutHandler, "PUT", "/1", map[string]string{"id": "test", "name": "test"}, w)
-	testHandlerWithBody(app.PatchHandler, "PATCH", "/1", [][]string{{"name", "test"}}, w)
+	TestHandlerWithBody(app.PutHandler, "PUT", "/1", map[string]string{"id": "test", "name": "test", "description": "test"}, w)
+
+	// !!! Item with id=1 might not exist
+	TestHandlerWithBody(app.PatchHandler, "PATCH", "/1", [][]string{{"name", "test"}}, w)
 }
 
 func Testhandler(handler func(w http.ResponseWriter, r *http.Request), req *http.Request, testResp http.ResponseWriter) {
@@ -37,7 +39,7 @@ func Testhandler(handler func(w http.ResponseWriter, r *http.Request), req *http
 
 }
 
-func testHandlerWithBody(handler func(w http.ResponseWriter, r *http.Request), method string, target string, input any, testResp http.ResponseWriter) {
+func TestHandlerWithBody(handler func(w http.ResponseWriter, r *http.Request), method string, target string, input any, testResp http.ResponseWriter) {
 	body, err := createBody(input)
 	if err == nil {
 		Testhandler(handler, httptest.NewRequest(method, target, body), testResp)
